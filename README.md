@@ -107,7 +107,7 @@ na parte superior do esquemático temos, além das alimentações, as linhas de 
 
 <img src="https://user-images.githubusercontent.com/86391684/127379861-4ada9714-4355-4e5c-a973-0a2765a3a742.png" width="650" />
 
-Por fim temos o resumo das conecções com o cartão SD 
+Por fim temos o resumo das conexões com o cartão SD 
 
 <img src="https://user-images.githubusercontent.com/86391684/127381590-86768873-9bd2-4205-8210-dc74dfc1990c.jpg" width="600" />
 
@@ -118,7 +118,7 @@ ________________________________________________________________________________
 Descrição da configuração da plataforma atravéz do CubeMX integrado na IDE STM32Cube, configurações não especificadas estão definidas como padrão 
 para geração do código.
 
-A partir de agora já temos a idéia do que será feito, e podemos prosseguir para a configuração do microcontrolador. na área de trabalho inicial de configuração, precisamos adicionar como será feito a comunicação da plataforma e o computador, nesse caso pela linha serial USB 
+A partir de agora já temos a ideia do que será feito, e podemos prosseguir para a configuração do microcontrolador. na área de trabalho inicial de configuração, precisamos adicionar como será feito a comunicação da plataforma e o computador, nesse caso pela linha serial USB 
 
   1. Na guia "System Core" clique em SYS > Debug > Serial Wire
 
@@ -140,9 +140,9 @@ Partimos então para a configuração dos periféricos do experimento, a começa
 
 Na cofinguração do botão do usuário vamos definir o pino PA0 como GPIO_EXTI0
 
-  1. Abra a congiguração do GPIO em System Core > GPIO || Ao selcionar o pino PA0 abres as configurações
+  1. Abra a congiguração do GPIO em System Core > GPIO || Ao selecionar o pino PA0 abres as configurações
   2. Defina o *GPIO mode* como modo de interrupção externa com detecção de disparo de borda ascendente || Assim temos a interrupção logo ao precionar o botão
-  3. Em GPIO Pull-up/Pull-down defina como Pull-down || é definido como Pull-down pois, como é visto no esquemático do botão, o pino de entrada no MCU está em nível lógico baixo por padrão (quando o botão não está pressionado)
+  3. Em GPIO Pull-up/Pull-down defina como Pull-down || É definido como Pull-down pois, como é visto no esquemático do botão, o pino de entrada no MCU está em nível lógico baixo por padrão (quando o botão não está pressionado)
   4. Logo acima temos a aba NVIC va até ela e selecione enable || NVIC dá um controle para priorizar interrupções, além de outras utilidades, (no momento não implementado)
 
 ![image](https://user-images.githubusercontent.com/86391684/127388241-087ed066-0307-4326-aedc-65c4e6b2240e.png)
@@ -151,13 +151,14 @@ A configuração da recepçãos dos dados vindo do potenciômetro vem a seguir
 
   1. Definimos o pino PA6 como *ADC1_IN6*
   2. Seguinte vá em System Core > DMA > Na aba DMA2 clique em *ADD*
-  3. Adicione o ADC1 ao DMA e configure em Mode > Circular ||desse modo temos o conversor AD captando e convertendo dados e o DMA colocando os dados diretamente na memória em um *buffer*, o modo circular faz com que quando o buffer estiver cheio de dados o DMA volte a enchelo pelo início
-  4. Em analog > ADC1 > Parameter Settings é possivel ver as configurações do ADC, selecione as opções abaixo
-     - Em *Clock Prescaler* selecione *PCLK2 divided by 8* ||assim teremos a derivação do clock de PCLK2 divido por 8
+  3. Adicione o ADC1 ao DMA e configure em Mode > Circular || Desse modo temos o conversor AD captando e convertendo dados e o DMA colocando os dados diretamente na memória em um *buffer*, o modo circular faz com que quando o buffer estiver cheio de dados, o DMA volte a enchelo pelo início
+  4. Em analog > ADC1 > Parameter Settings é possível ver as configurações do ADC, selecione as opções abaixo
+     - Em *Clock Prescaler* selecione *PCLK2 divided by 8* || Assim teremos a derivação do clock de PCLK2 divido por 8
      - *Resolution* selecione *12 bits* ||com 12 bits ao variar o potenciômentro, variamos os dados de 0 até 4095 em decimal
      - Habilite *Continuous conversion mode* 
-     - Habulite *DMA Continuous Rquests*
-     - em *Rank* temos *Sampling time* selecione *480 Cycles* || define a quantidade de ciclos para a amostragem de um sinal
+     - Habilite *DMA Continuous Rquests*
+     - em *Rank* temos *Sampling time* selecione *480 Cycles* || Define a quantidade de ciclos para a amostragem de um sinal
+
 colocar imagem da configuração 
 
 falar sobre a arvore de clock
