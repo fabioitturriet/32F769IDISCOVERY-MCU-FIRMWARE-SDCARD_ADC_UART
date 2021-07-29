@@ -32,7 +32,7 @@ ________________________________________________________________________________
 - GND: filtro graduado de densidade neutra ("Terra")
 - GPIO: portas programáveis de entrada e saída de dados
 - NVIC: controle de interrupção de vetor aninhado 
-
+- APB: Arquitetura avançada de barramento de microcontrolador
 _____________________________________________________________________________________________________________________________________________
 
 ### Começando um novo projeto
@@ -159,14 +159,50 @@ A configuração da recepçãos dos dados vindo do potenciômetro vem a seguir
      - Habilite *DMA Continuous Rquests*
      - em *Rank* temos *Sampling time* selecione *480 Cycles* || Define a quantidade de ciclos para a amostragem de um sinal
 
-colocar imagem da configuração 
+![image](https://user-images.githubusercontent.com/86391684/127425182-ffa2fd9f-d58e-4472-be13-1da318a9d9c5.png)
 
-falar sobre a arvore de clock
+O clock que vai pro ADC vem de uma derivação do clock do APB2 que vem do PCLK2 para esse experimento definimos o clock do APB2 como 8MHz
 
-colocar imagem da arvore de clock
+  5. Na guia *Clock Configuration* coloque o valor de 8 MHz no *APB2 peripheral clocks* e aperte "enter" o CUBE IDE automaticamente calculará os valores ideais para o restante
 
-A diminuição do clock do PCLK2, a divisão do PCLK2 por 8 e o aumento de ciclos de amostragem são ferramentas para aumentar o tempo em que um dado é gerado pelo ADC, isso é feito pois não necessitamos de uma grande quantidades de dados por segundo vindos do ADC. Por padrão o ADC necessecita de 12 ciclos de clock para a captação do dado em 12 bits, com o clock de 8MHz em PCLK2 utilizamos o *prescaler* para diminuir essa velocidade para 1MHz: 
+![Localização do APB2 em clock configuration](https://user-images.githubusercontent.com/86391684/127427956-646cda87-c0dd-4a1a-ba95-0be8eb5bc31b.jpg)
 
-12 bits: 1000Hz/(12 ciclos de conversão + 480 ciclos de captação) => ~2amostras/s (o que espeva ter)
+A diminuição do clock do PCLK2, a divisão do PCLK2 por 8 e o aumento de ciclos de amostragem são ferramentas para aumentar o tempo em que um dado é gerado pelo ADC, isso é feito pois não necessitamos de uma grande quantidades de dados por segundo vindos do ADC. Por padrão o ADC necessecita de 12 ciclos de clock para a captação do dado em 12 bits, com o clock de 8MHz, em PCLK2 utilizamos o *prescaler* para diminuir essa velocidade para 1MHz: 
+
+12 bits: 1000Hz/(12 ciclos de conversão + 480 ciclos de captação) => ~2amostras/s (o que esperava ter)
+
+Por fim temos a configuração do Conector SD
+
+  1. Volte para *Pinout & Configuration*
+  2. Vá até connectivity > SDMMC2 > Mode e selecione *SD 4 bits Wide bus*
+  3. Em *configuration* clique na aba *NVIC Settings* e habilite o *SDMMC2 global interrrupt*
+  
+![image](https://user-images.githubusercontent.com/86391684/127430677-a8ef86ef-1941-403d-9603-80e9344ac993.png)
+
+  4. Ainda em *SDMMC2 configuration* clique na aba *DMA Settings* e em *Add* e adicione TX e o RX do SDMMC2 no DMA
+
+![image](https://user-images.githubusercontent.com/86391684/127431076-b5a8be0a-f04e-4ada-a328-5a3538c9f1e6.png)
+
+  5. definimos então o pino PI15, de detecção do cartão SD, como entrada (GPIO_Input)
+  6. Subsequentemente vá até Middleware > FATFS > em *Mode* marque *SD card*
+  7. Em *configuration* clique na aba *Platform Settings*, em Detect_SDIO, selecione o PI15 na coluna *Found Solutions*
+
+![image](https://user-images.githubusercontent.com/86391684/127433019-51ce4260-dd97-4f6a-807e-8b25e32cc642.png)
+
+  8. Na guia *Advanced Settings*, habilete *Use dma template*
+
+![image](https://user-images.githubusercontent.com/86391684/127433681-ce2c05b3-d2c0-4770-9015-576ebedb3128.png)
+
+  9. Na aba *Project Manager* recomendado alterar o *Minimum Heap Size* para "0x400" e o *Minimum Stack Size* para "0x800"
+
+![image](https://user-images.githubusercontent.com/86391684/127434000-5a883465-548c-403b-8e10-6d33d6a4ea3b.png)
 
 
+referencias 
+
+ - [Exemplos de programas utilizando potenciometro, interrupção, DMA e ADC](https://www.digikey.com/en/maker/projects/getting-started-with-stm32-working-with-adc-and-dma/f5009db3a3ed4370acaf545a3370c30c)
+ - [Criando arquivo de sistema no cartão SD](https://www.youtube.com/watch?v=I9KDN1o6924)
+ - [Exeplo de interrupção utilizando o botão do usuário](https://deepbluembedded.com/stm32-external-interrupt-example-lab/)
+ - [Cartão SD utilizando cominição SPI, demonstração de funções inportantes](https://www.youtube.com/watch?v=spVIZO-jbxE)
+ - [Descrição das funções FATFS utilizadas no programa](http://elm-chan.org/fsw/ff/00index_e.html)
+ 
