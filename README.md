@@ -143,9 +143,16 @@ Na cofinguração do botão do usuário vamos definir o pino PA0 como GPIO_EXTI0
   1. Abra a congiguração do GPIO em System Core > GPIO || Ao selecionar o pino PA0 abres as configurações
   2. Defina o *GPIO mode* como modo de interrupção externa com detecção de disparo de borda ascendente || Assim temos a interrupção logo ao precionar o botão
   3. Em GPIO Pull-up/Pull-down defina como Pull-down || É definido como Pull-down pois, como é visto no esquemático do botão, o pino de entrada no MCU está em nível lógico baixo por padrão (quando o botão não está pressionado)
-  4. Logo acima temos a aba NVIC va até ela e selecione enable || NVIC dá um controle para priorizar interrupções, além de outras utilidades, (no momento não implementado)
+  4. Logo acima temos a aba NVIC va até ela e selecione enable || NVIC dá um controle para priorizar interrupções, além de outras utilidades
 
 ![image](https://user-images.githubusercontent.com/86391684/127388241-087ed066-0307-4326-aedc-65c4e6b2240e.png)
+
+  Em System Core > NVIC temos as configurações de prioridades de interrupções, nelas foi deixado com prioridade maior (valor numérico menor) as interrupções internas do sistema, por seguinte foram configuradas as demais conformem surgissem no código.
+  
+  ![image](https://user-images.githubusercontent.com/86391684/127602243-9f93cdfa-7ec5-49da-afd3-ce8f35677258.png)
+
+  obs.: se não configurado isso, o código fica preso dentro de funções da biblioteca HALL, quando tais funções forem chamadas dentro de alguma rotina de tratamento de interrupção. Este erro é relatado em fóruns, e deverá ser explicado melhor aqui quando se obter uma resposta definitiva.
+
 
 A configuração da recepçãos dos dados vindo do potenciômetro vem a seguir
 
