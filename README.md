@@ -204,8 +204,82 @@ Por fim temos a configuração do Conector SD
 
 ![image](https://user-images.githubusercontent.com/86391684/127434000-5a883465-548c-403b-8e10-6d33d6a4ea3b.png)
 
+Assim finalizamos a configuração da plataforma. Podemos então salvar o projeto e gerar o código inicial, é possivel salvar o projeto atravéz do ícone de disquete :floppy_disk: ou pelo atalho "Ctrl+S" ou pela guia File > Save.
 
-referencias 
+_____________________________________________________________________________________________________________________________________________
+
+### Programação 
+
+Dentro do *main* a única função executada é a de iniciar as requisições do ADC com DMA:
+'HAL_ADC_Start_DMA(&hadc1,(uint32_t*)adc_buf, ADC_BUF_LEN);'
+nela é passado a estrutura do ADC 'hadc1', um ponteiro para o *buffer* utilizado para salvar as requisições 'adc_buf', e o tamanho desse *buffer* 'ADC_BUF_LEN' que no caso foi utilizado de 512 lugares. Apesar de termos os 512 posições com dados, nem todos esses dados serão eviadas pela serial ou salvados no catão SD, acontece que as derivações de *clock* não foram suficientes em diminuir a velocidade de requisições do ADC, isso acaba sendo inviável logo que não queremos muitos dados sendo expostos constamentes pela serial do computador, impossibilitando a visualização suave das informações.
+
+o código então se resume em três funções:
+
+'HAL_ADC_ConvHalfCpltCallback' e 'HAL_ADC_ConvCpltCallback' são funções de interrupção do ADC. 'HAL_GPIO_EXTI_Callback' é uma função também de interrupção, só que de interrupção externa, ela é a rotina de tratamento da interrupção gerada pelo botão do usuário.
+
+- 'HAL_ADC_ConvHalfCpltCallback' é chamada toda vez que o DMA completar a metade do *buffer* do ADC de dados.
+   - Nessa função é pego o valor da metade do *buffer*, ou seja da posição 256, e enviado pela porta serial para o computador, o restante da amostra é descartado, ou seja, não é feito nada com as 255 posições iniciais.
+- 'HAL_ADC_ConvCpltCallback' é chamada toda vez que o DMA completar totalmente o *buffer* do ADC de dados.
+   - Nessa função é pego o valor da última posição do *buffer*, ou seja da posição 512, e enviado da mesma forma para o monitor serial
+
+Dessa forma estamos pegando um dado a cada 256 posições. Vale resaltar que o DMA utilizando é circular, então ao preencher todos os 512 lugares de dados, o DMA volta pro inicio do *buffer* e repete o processo. Portanto temos uma espécide de *buffer ping pong*, enquanto o DMA preenche metade do buffer, é executado uma ação na outra metade.
+
+- 'HAL_GPIO_EXTI_Callback' é chamada toda vez que é apertado o botão do usuário. Nela temos o 'controll_gravacao' que basicamente registra se é o primeiro ou o segundo clique no botão, indicando início e fim de gravação respectivamente. No primeiro clique, a função condicional *if* se torna verdadeira, nela é executada as funções de configurações e preparação para o catão SD receber dados. A partir de então a função é finalizada e o SD esta pronto para receber dados. Como a variável 'controll_gravacao' foi alterada pelo clique, temos uma reação em cadeia que as funções 'HAL_ADC_ConvHalfCpltCallback' e 'HAL_ADC_ConvCpltCallback' passam a enviar dados tanto para o monitor serial quanto para o cartão SD.
+  Ao clicar no botão novamente, temos a alteração na variável de controle, e a função condicional *if* é negada, executando o fechamento do arquivo do cartão SD, agora as funçoes de interrupção gerada pelo ADC não enviam dados ao cartão SD.
+ 
+ Extra: foi criado uma função para a geração de um arquivo separado no cartão SD para cada "segundo clique" no botão do usuário, ou seja, fazer duas gravações de dados numa mesma execução do código acaba não substituindo o arquivo anterior no cartão SD. A seguir a configuração no monitor serial PuTTY
+ 
+_____________________________________________________________________________________________________________________________________________
+
+# Conclusões e observações
+
+Para a visualização dos dados no computador é necessário um monitor serial configurado corretamente, com base no *baund rate* padrão da configuração da USART1, 115200 bits/s, configuramos o monitor serial, é preciso confirmar a porta COM conectado ao MCU em "Gerenciador de Dispositivos".
+
+![image](https://user-images.githubusercontent.com/86391684/127731002-53de3e09-afb4-48e6-a8e2-6eea8215a259.png)
+
+Executando o *Firmware* pode-se abrir o monitor serial
+
+viazualize os dados de tensão na tela do computador 
+
+imagem
+
+Apertando o botão é apresentada as mensagens de configuração do cartão SD demarcando o inicio da gravação
+
+imagem
+
+apertando o botão novamente surge a mensagem "Fim da gravação!!!"
+
+### visualização dos arquivos no MicroSD
+
+Plugando o MicroSD no computador é possivel visualizar os arquivos ".txt" gerados, o número de arquivos depende da quantidade de gravações realizadas, na imagem foram três
+
+![image](https://user-images.githubusercontent.com/86391684/127731505-efde0e88-8f9c-403a-805c-ffadb989ec91.png)
+
+Como visto, dentro dos arquivos temos os dados salvos em uma coluna.
+
+
+### visualização dos dados no Matlab
+
+É possivel, atravéz do Matlab, visualizar os dados em um gráfico
+
+Salve o arquivo desejado em uma pasta em seu *desktop*. No matlab crie um *New Script* e salve-o na mesma pasta do arquivo, na área de programação digite o seguinte código fazendo os devidos ajustes:
+
+close all;
+clear all;
+data = importdata('DADOS1.TXT');
+figure ()
+plot(data.data)
+ylabel('Tensão Potenciômetro')
+xlabel('Número de amostras')
+legend('Tensão')
+title ('Teste do conversor AD')
+
+Ao rodar este código será gerado um gráfico de tensões por número de amostras
+
+![image](https://user-images.githubusercontent.com/86391684/127731451-2bb081dd-41eb-4853-b542-99c168f4b476.png)
+
+## Referências 
 
  - [Exemplos de programas utilizando potenciometro, interrupção, DMA e ADC](https://www.digikey.com/en/maker/projects/getting-started-with-stm32-working-with-adc-and-dma/f5009db3a3ed4370acaf545a3370c30c)
  - [Criando arquivo de sistema no cartão SD](https://www.youtube.com/watch?v=I9KDN1o6924)
