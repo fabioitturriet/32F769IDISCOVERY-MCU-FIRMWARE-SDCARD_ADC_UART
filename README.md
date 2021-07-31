@@ -228,13 +228,13 @@ Dessa forma estamos pegando um dado a cada 256 posições. Vale resaltar que o D
 - 'HAL_GPIO_EXTI_Callback' é chamada toda vez que é apertado o botão do usuário. Nela temos o 'controll_gravacao' que basicamente registra se é o primeiro ou o segundo clique no botão, indicando início e fim de gravação respectivamente. No primeiro clique, a função condicional *if* se torna verdadeira, nela é executada as funções de configurações e preparação para o catão SD receber dados. A partir de então a função é finalizada e o SD esta pronto para receber dados. Como a variável 'controll_gravacao' foi alterada pelo clique, temos uma reação em cadeia que as funções 'HAL_ADC_ConvHalfCpltCallback' e 'HAL_ADC_ConvCpltCallback' passam a enviar dados tanto para o monitor serial quanto para o cartão SD.
   Ao clicar no botão novamente, temos a alteração na variável de controle, e a função condicional *if* é negada, executando o fechamento do arquivo do cartão SD, agora as funçoes de interrupção gerada pelo ADC não enviam dados ao cartão SD.
  
- Extra: foi criado uma função para a geração de um arquivo separado no cartão SD para cada "segundo clique" no botão do usuário, ou seja, fazer duas gravações de dados numa mesma execução do código acaba não substituindo o arquivo anterior no cartão SD. A seguir a configuração no monitor serial PuTTY
+ Extra: foi criado uma função para a geração de um arquivo separado no cartão SD para cada "segundo clique" no botão do usuário, ou seja, fazer duas gravações de dados numa mesma execução do código acaba não substituindo o arquivo anterior no cartão SD.
  
 _____________________________________________________________________________________________________________________________________________
 
 # Conclusões e observações
 
-Para a visualização dos dados no computador é necessário um monitor serial configurado corretamente, com base no *baund rate* padrão da configuração da USART1, 115200 bits/s, configuramos o monitor serial, é preciso confirmar a porta COM conectado ao MCU em "Gerenciador de Dispositivos".
+Para a visualização dos dados no computador é necessário um monitor serial configurado corretamente, com base no *baund rate* padrão da configuração da USART1, 115200 bits/s, configuramos o monitor serial, é preciso confirmar a porta COM conectado ao MCU em "Gerenciador de Dispositivos". A seguir a configuração no monitor serial PuTTY
 
 ![image](https://user-images.githubusercontent.com/86391684/127731002-53de3e09-afb4-48e6-a8e2-6eea8215a259.png)
 
@@ -279,6 +279,7 @@ Ao rodar este código será gerado um gráfico de tensões por número de amostr
 
 ![image](https://user-images.githubusercontent.com/86391684/127731451-2bb081dd-41eb-4853-b542-99c168f4b476.png)
 
+_____________________________________________________________________________________________________________________________________________
 ## Referências 
 
  - [Exemplos de programas utilizando potenciometro, interrupção, DMA e ADC](https://www.digikey.com/en/maker/projects/getting-started-with-stm32-working-with-adc-and-dma/f5009db3a3ed4370acaf545a3370c30c)
