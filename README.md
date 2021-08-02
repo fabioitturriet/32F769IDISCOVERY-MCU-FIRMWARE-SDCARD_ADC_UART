@@ -81,7 +81,7 @@ Um caso secundário da **captação dos dados** é quando eles serão salvos no 
 <img src="https://user-images.githubusercontent.com/86391684/127268665-ee1ffd0e-fb1d-413d-918d-160f955149cb.png" width="500" />
 <img src="https://user-images.githubusercontent.com/86391684/127268811-ce651b7c-2ec3-4ff8-a8f4-f4f116b3d742.jpg" width="600" />
 
-Fica claro a coneção do botão com o pino PA0
+Fica claro a conexão do botão com o pino PA0
 
 Por fim temos a parte de **visualização dos dados**, esta seção também será dividida em duas partes. Na primeira parte teremos a visualização conínua dos dados no monitor serial, para isto foi instalado o monittor [PuTTY](https://www.putty.org/) no computador. esta comunicação entre o microcontrolador e o computador será dada pela ST_Link que faz a simulação de uma porta serial, o protocolo utilizado é a USART e o caminho percorrido pelos dados é descrito a seguir
 
@@ -103,7 +103,7 @@ No MicroSD será inserido um arquivo no formato .TXT, que por sua vez será inse
 
 <img src="https://user-images.githubusercontent.com/86391684/127378718-bc18c094-0e21-479a-a403-b7812d42cfb2.png" width="400" />
 
-na parte superior do esquemático temos, além das alimentações, as linhas de comunicação com o conector, essa interface com o catão SD é dado pelo periférico SDMMC, na parte de baixo da imagem temos o uSD_Detect, linha responsável pela detecção do MicroSD conectado as *slot*, uSD_Detect esta conectado ao pino PI15 do MCU e deve ser configurado como GPIO_Input
+na parte superior do esquemático temos, além das alimentações, as linhas de comunicação com o conector, essa interface com o cartão SD é dado pelo periférico SDMMC, na parte de baixo da imagem temos o uSD_Detect, linha responsável pela detecção do MicroSD conectado ao *slot*, uSD_Detect esta conectado ao pino PI15 do MCU e deve ser configurado como GPIO_Input
 
 <img src="https://user-images.githubusercontent.com/86391684/127379861-4ada9714-4355-4e5c-a973-0a2765a3a742.png" width="650" />
 
@@ -136,7 +136,7 @@ Partimos então para a configuração dos periféricos do experimento, a começa
   1. Definimos então o pino PA9 como USART1_TX 
   2. Em *connectivity* vamos ate USART1 > Mode > Asynchronous
 
-![image](https://user-images.githubusercontent.com/86391684/127383180-12e76951-72c9-46a4-b59c-b7e6ced8d5f6.png)
+<img src="https://user-images.githubusercontent.com/86391684/127383180-12e76951-72c9-46a4-b59c-b7e6ced8d5f6.png" width="800" />
 
 Na cofinguração do botão do usuário vamos definir o pino PA0 como GPIO_EXTI0
 
@@ -145,11 +145,11 @@ Na cofinguração do botão do usuário vamos definir o pino PA0 como GPIO_EXTI0
   3. Em GPIO Pull-up/Pull-down defina como Pull-down || É definido como Pull-down pois, como é visto no esquemático do botão, o pino de entrada no MCU está em nível lógico baixo por padrão (quando o botão não está pressionado)
   4. Logo acima temos a aba NVIC va até ela e selecione enable || NVIC dá um controle para priorizar interrupções, além de outras utilidades
 
-![image](https://user-images.githubusercontent.com/86391684/127388241-087ed066-0307-4326-aedc-65c4e6b2240e.png)
+<img src="https://user-images.githubusercontent.com/86391684/127388241-087ed066-0307-4326-aedc-65c4e6b2240e.png" width="800" />
 
   Em System Core > NVIC temos as configurações de prioridades de interrupções, nelas foi deixado com prioridade maior (valor numérico menor) as interrupções internas do sistema, por seguinte foram configuradas as demais conformem surgissem no código.
   
-  ![image](https://user-images.githubusercontent.com/86391684/127602243-9f93cdfa-7ec5-49da-afd3-ce8f35677258.png)
+  <img src="https://user-images.githubusercontent.com/86391684/127602243-9f93cdfa-7ec5-49da-afd3-ce8f35677258.png" width="800" />
 
   obs.: se não configurado isso, o código fica preso dentro de funções da biblioteca HALL, quando tais funções forem chamadas dentro de alguma rotina de tratamento de interrupção. Este erro é relatado em fóruns, e deverá ser explicado melhor aqui quando se obter uma resposta definitiva.
 
@@ -166,13 +166,13 @@ A configuração da recepçãos dos dados vindo do potenciômetro vem a seguir
      - Habilite *DMA Continuous Rquests*
      - em *Rank* temos *Sampling time* selecione *480 Cycles* || Define a quantidade de ciclos para a amostragem de um sinal
 
-![image](https://user-images.githubusercontent.com/86391684/127425182-ffa2fd9f-d58e-4472-be13-1da318a9d9c5.png)
+<img src="https://user-images.githubusercontent.com/86391684/127425182-ffa2fd9f-d58e-4472-be13-1da318a9d9c5.png" width="800" />
 
 O clock que vai pro ADC vem de uma derivação do clock do APB2 que vem do PCLK2 para esse experimento definimos o clock do APB2 como 8MHz
 
   5. Na guia *Clock Configuration* coloque o valor de 8 MHz no *APB2 peripheral clocks* e aperte "enter" o CUBE IDE automaticamente calculará os valores ideais para o restante
 
-![Localização do APB2 em clock configuration](https://user-images.githubusercontent.com/86391684/127427956-646cda87-c0dd-4a1a-ba95-0be8eb5bc31b.jpg)
+<img src="https://user-images.githubusercontent.com/86391684/127427956-646cda87-c0dd-4a1a-ba95-0be8eb5bc31b.jpg" width="800" />
 
 A diminuição do clock do PCLK2, a divisão do PCLK2 por 8 e o aumento de ciclos de amostragem são ferramentas para aumentar o tempo em que um dado é gerado pelo ADC, isso é feito pois não necessitamos de uma grande quantidades de dados por segundo vindos do ADC. Por padrão o ADC necessecita de 12 ciclos de clock para a captação do dado em 12 bits, com o clock de 8MHz, em PCLK2 utilizamos o *prescaler* para diminuir essa velocidade para 1MHz: 
 
@@ -183,26 +183,26 @@ Por fim temos a configuração do Conector SD
   1. Volte para *Pinout & Configuration*
   2. Vá até connectivity > SDMMC2 > Mode e selecione *SD 4 bits Wide bus*
   3. Em *configuration* clique na aba *NVIC Settings* e habilite o *SDMMC2 global interrrupt*
-  
-![image](https://user-images.githubusercontent.com/86391684/127430677-a8ef86ef-1941-403d-9603-80e9344ac993.png)
+
+<img src="https://user-images.githubusercontent.com/86391684/127430677-a8ef86ef-1941-403d-9603-80e9344ac993.png" width="400" />
 
   4. Ainda em *SDMMC2 configuration* clique na aba *DMA Settings* e em *Add* e adicione TX e o RX do SDMMC2 no DMA
 
-![image](https://user-images.githubusercontent.com/86391684/127431076-b5a8be0a-f04e-4ada-a328-5a3538c9f1e6.png)
+<img src="https://user-images.githubusercontent.com/86391684/127431076-b5a8be0a-f04e-4ada-a328-5a3538c9f1e6.png" width="400" />
 
   5. definimos então o pino PI15, de detecção do cartão SD, como entrada (GPIO_Input)
   6. Subsequentemente vá até Middleware > FATFS > em *Mode* marque *SD card*
   7. Em *configuration* clique na aba *Platform Settings*, em Detect_SDIO, selecione o PI15 na coluna *Found Solutions*
 
-![image](https://user-images.githubusercontent.com/86391684/127433019-51ce4260-dd97-4f6a-807e-8b25e32cc642.png)
+<img src="https://user-images.githubusercontent.com/86391684/127433019-51ce4260-dd97-4f6a-807e-8b25e32cc642.png" width="800" />
 
   8. Na guia *Advanced Settings*, habilete *Use dma template*
 
-![image](https://user-images.githubusercontent.com/86391684/127433681-ce2c05b3-d2c0-4770-9015-576ebedb3128.png)
+<img src="https://user-images.githubusercontent.com/86391684/127433681-ce2c05b3-d2c0-4770-9015-576ebedb3128.png" width="400" />
 
   9. Na aba *Project Manager* recomendado alterar o *Minimum Heap Size* para "0x400" e o *Minimum Stack Size* para "0x800"
 
-![image](https://user-images.githubusercontent.com/86391684/127434000-5a883465-548c-403b-8e10-6d33d6a4ea3b.png)
+<img src="https://user-images.githubusercontent.com/86391684/127434000-5a883465-548c-403b-8e10-6d33d6a4ea3b.png" width="800" />
 
 Assim finalizamos a configuração da plataforma. Podemos então salvar o projeto e gerar o código inicial, é possivel salvar o projeto atravéz do ícone de disquete :floppy_disk: ou pelo atalho "Ctrl+S" ou pela guia File > Save.
 
@@ -236,30 +236,30 @@ ________________________________________________________________________________
 
 Para a visualização dos dados no computador é necessário um monitor serial configurado corretamente, com base no *baund rate* padrão da configuração da USART1, 115200 bits/s, configuramos o monitor serial, é preciso confirmar a porta COM conectado ao MCU em "Gerenciador de Dispositivos". A seguir a configuração no monitor serial PuTTY
 
-![image](https://user-images.githubusercontent.com/86391684/127731002-53de3e09-afb4-48e6-a8e2-6eea8215a259.png)
+<img src="https://user-images.githubusercontent.com/86391684/127731002-53de3e09-afb4-48e6-a8e2-6eea8215a259.png" width="500" />
 
 Executando o *Firmware* pode-se abrir o monitor serial
 
 viazualize os dados de tensão na tela do computador 
 
-imagem
+<img src="https://user-images.githubusercontent.com/86391684/127864213-a0f50575-3d1f-43d9-b331-12b62f6f253c.png" width="500" />
 
 Apertando o botão é apresentada as mensagens de configuração do cartão SD demarcando o inicio da gravação
 
-imagem
+<img src="https://user-images.githubusercontent.com/86391684/127864421-09842d43-337e-41e8-bab7-3a0f6b10eeba.png" width="500" />
 
 apertando o botão novamente surge a mensagem "Fim da gravação!!!"
 
-### visualização dos arquivos no MicroSD
+### Visualização dos arquivos no MicroSD
 
 Plugando o MicroSD no computador é possivel visualizar os arquivos ".txt" gerados, o número de arquivos depende da quantidade de gravações realizadas, na imagem foram três
 
-![image](https://user-images.githubusercontent.com/86391684/127731505-efde0e88-8f9c-403a-805c-ffadb989ec91.png)
+<img src="https://user-images.githubusercontent.com/86391684/127731505-efde0e88-8f9c-403a-805c-ffadb989ec91.png" width="800" />
 
 Como visto, dentro dos arquivos temos os dados salvos em uma coluna.
 
 
-### visualização dos dados no Matlab
+### Visualização dos dados no Matlab
 
 É possivel, atravéz do Matlab, visualizar os dados em um gráfico
 
@@ -277,7 +277,7 @@ title ('Teste do conversor AD')
 
 Ao rodar este código será gerado um gráfico de tensões por número de amostras
 
-![image](https://user-images.githubusercontent.com/86391684/127731451-2bb081dd-41eb-4853-b542-99c168f4b476.png)
+<img src="https://user-images.githubusercontent.com/86391684/127731451-2bb081dd-41eb-4853-b542-99c168f4b476.png" width="450" />
 
 _____________________________________________________________________________________________________________________________________________
 ## Referências 
