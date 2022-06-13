@@ -176,7 +176,7 @@ O clock que vai pro ADC vem de uma derivação do clock do APB2 que vem do PCLK2
 
 A diminuição do clock do PCLK2, a divisão do PCLK2 por 8 e o aumento de ciclos de amostragem são ferramentas para aumentar o tempo em que um dado é gerado pelo ADC, isso é feito pois não necessitamos de uma grande quantidades de dados por segundo vindos do ADC. Por padrão o ADC necessecita de 12 ciclos de clock para a captação do dado em 12 bits, com o clock de 8MHz, em PCLK2 utilizamos o *prescaler* para diminuir essa velocidade para 1MHz: 
 
-12 bits: 1000Hz/(12 ciclos de conversão + 480 ciclos de captação) => ~2amostras/s (o que esperava ter)
+12 bits: 1000000Hz/(12 ciclos de conversão + 480 ciclos de captação) => ~2032amostras/s
 
 Por fim temos a configuração do Conector SD
 
@@ -212,7 +212,7 @@ ________________________________________________________________________________
 
 Dentro do *main* a única função executada é a de iniciar as requisições do ADC com DMA:
 'HAL_ADC_Start_DMA(&hadc1,(uint32_t*)adc_buf, ADC_BUF_LEN);'
-nela é passado a estrutura do ADC 'hadc1', um ponteiro para o *buffer* utilizado para salvar as requisições 'adc_buf', e o tamanho desse *buffer* 'ADC_BUF_LEN' que no caso foi utilizado de 512 lugares. Apesar de termos os 512 posições com dados, nem todos esses dados serão eviadas pela serial ou salvados no catão SD, acontece que as derivações de *clock* não foram suficientes em diminuir a velocidade de requisições do ADC, isso acaba sendo inviável logo que não queremos muitos dados sendo expostos constamentes pela serial do computador, impossibilitando a visualização suave das informações.
+nela é passado a estrutura do ADC 'hadc1', um ponteiro para o *buffer* utilizado para salvar as requisições 'adc_buf', e o tamanho desse *buffer* 'ADC_BUF_LEN' que no caso foi utilizado de 512 lugares. Apesar de termos os 512 posições com dados, nem todos esses dados serão eviadas pela serial ou salvados no catão SD, acontece que as derivações de *clock* não foram suficientes em diminuir a velocidade de requisições do ADC, isso acaba sendo inviável logo que não queremos muitos dados sendo expostos constamentes pela serial do computador, impossibilitando a visualização suave das informações. Foi realizado um filtro de decimação onde a cada 512 amostras, 511 são descartadas e uma enviada para a porta serial. Assim sendo 2032/512 temos ~4 amostras/segundo sendo enviadas pela porta serial.
 
 o código então se resume em três funções:
 
