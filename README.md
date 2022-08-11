@@ -44,14 +44,13 @@ Inicialmente reproduzimos o STM32CubeIDE, na área de trabalho do Cube IDE criam
 <img src="https://user-images.githubusercontent.com/86391684/124516208-87adcc80-ddb7-11eb-8ec8-adc3c2a376dc.png" width="800" />
 
   2. Aberta a janela de seleção de plataformas "Target selection"
-  3. Escolha a plataforma de desenvolvimento a ser utilizada, nesse caso a STM32F769I-DISCO
-  
+  3. Em "Comercial Part Number" pesquise a plataforma de desenvolvimento a ser utilizada, neste caso a STM32F769I-DISCO
+  4. Em "Board List" localize a coluna "Mounted Device" e clique no link, neste caso "STM32F769NIH6"
+  5. Então clique em "Next"
   
 <img src="https://user-images.githubusercontent.com/52749849/184149543-26043193-b721-44f8-824e-ab66e1d65edf.jpg" width="800" />
 
-<img src="https://user-images.githubusercontent.com/86391684/124516617-7d400280-ddb8-11eb-8277-5a0868bb48db.png" width="800" />
-
-  4. Na janela de configuração, dê um nome ao seu projeto e prossiga com "Finish"
+  6. Na janela de configuração, dê um nome ao seu projeto e prossiga com "Finish"
 
 <img src="https://user-images.githubusercontent.com/86391684/127256920-8c09eaea-b113-44b8-a81c-1eb886711790.png" width="400" />
 
