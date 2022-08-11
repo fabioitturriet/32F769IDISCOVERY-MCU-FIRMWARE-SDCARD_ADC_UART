@@ -47,7 +47,7 @@ Inicialmente reproduzimos o STM32CubeIDE, na área de trabalho do Cube IDE criam
   3. Escolha a plataforma de desenvolvimento a ser utilizada, nesse caso a STM32F769I-DISCO
   
   
-<img src="https://user-images.githubusercontent.com/52749849/184149543-26043193-b721-44f8-824e-ab66e1d65edf.jpg />
+<img src="https://user-images.githubusercontent.com/52749849/184149543-26043193-b721-44f8-824e-ab66e1d65edf.jpg" width="800" />
 
 <img src="https://user-images.githubusercontent.com/86391684/124516617-7d400280-ddb8-11eb-8277-5a0868bb48db.png" width="800" />
 
