@@ -238,7 +238,7 @@ ________________________________________________________________________________
 
 # Conclusões e observações
 
-Para a visualização dos dados no computador é necessário um monitor serial configurado corretamente, com base no *baund rate* padrão da configuração da USART1, 115200 bits/s, configuramos o monitor serial, é preciso confirmar a porta COM conectado ao MCU em "Gerenciador de Dispositivos". A seguir a configuração no monitor serial PuTTY
+Para a visualização dos dados no computador é necessário um monitor serial configurado corretamente, com base no *baund rate* padrão da configuração da USART1, 115200 bits/s, configuramos o monitor serial É preciso confirmar a porta COM conectado ao MCU em "Gerenciador de Dispositivos". A seguir a configuração no monitor serial PuTTY
 
 <img src="https://user-images.githubusercontent.com/86391684/127731002-53de3e09-afb4-48e6-a8e2-6eea8215a259.png" width="500" />
 
