@@ -71,7 +71,7 @@ Na imagem a seguir temos as entradas analógicas, dentre elas foi escolhido a PA
 
 <img src="https://user-images.githubusercontent.com/86391684/127262804-e8efc0b8-b038-421f-99c1-7cc9c15f3d94.png" width="700" />
 
-Para a **Capitação dos dados** será configurado um Conversor Analógico Digital (ADC) juntamente com o Acesso Direto a Memória (DMA), com o DMA temos os dados sendo colocados diretamente em um *Buffer* na memória, desafogando a unidade central de processamento (CPU). O conversor escolhido foi o ADC1 logo é importante localizá-lo no mapa de requisição DMA
+Para a **Captação dos dados** será configurado um Conversor Analógico Digital (ADC) juntamente com o Acesso Direto a Memória (DMA), com o DMA temos os dados sendo colocados diretamente em um *Buffer* na memória, desafogando a unidade central de processamento (CPU). O conversor escolhido foi o ADC1 logo é importante localizá-lo no mapa de requisição DMA
 
 <img src="https://user-images.githubusercontent.com/86391684/127264865-e4e83b8d-6136-45db-a6d6-f0d360c1350e.png" width="700" />
 
@@ -97,15 +97,15 @@ Na figura do diagrama do experimento temos um resumo disto
 
 <img src="https://user-images.githubusercontent.com/86391684/127372699-6bcf66ca-a996-46f2-8a0a-394d33cd1a5f.jpg" width="600" />
 
-Na segunta parte da **visualização dos dados** temos o SD Card, o tipo compativel com a conector no kit de desenvolvimento é o MicroSD e esta localizado conforme a figura a seguir
+Na segunta parte da **visualização dos dados** temos o SD Card, o tipo compatível com a conector no kit de desenvolvimento é o MicroSD e está localizado conforme a figura a seguir
 
 <img src="https://user-images.githubusercontent.com/86391684/127378549-5ff69932-7288-4335-a984-7fd8d9345979.jpg" width="650" />
 
-No MicroSD será inserido um arquivo no formato .TXT, que por sua vez será inserido os dados com o auxílio, como já falado, do botão do usuário, A seguir temos a imagem do esquemático do cartão SD
+No MicroSD será inserido um arquivo no formato .TXT, que por sua vez será inserido os dados com o auxílio, como já falado, do botão do usuário. A seguir temos a imagem do esquemático do cartão SD
 
 <img src="https://user-images.githubusercontent.com/86391684/127378718-bc18c094-0e21-479a-a403-b7812d42cfb2.png" width="400" />
 
-na parte superior do esquemático temos, além das alimentações, as linhas de comunicação com o conector, essa interface com o cartão SD é dado pelo periférico SDMMC, na parte de baixo da imagem temos o uSD_Detect, linha responsável pela detecção do MicroSD conectado ao *slot*, uSD_Detect esta conectado ao pino PI15 do MCU e deve ser configurado como GPIO_Input
+Na parte superior do esquemático temos, além das alimentações, as linhas de comunicação com o conector, essa interface com o cartão SD é dado pelo periférico SDMMC, na parte de baixo da imagem temos o uSD_Detect, linha responsável pela detecção do MicroSD conectado ao *slot*, uSD_Detect esta conectado ao pino PI15 do MCU e deve ser configurado como GPIO_Input
 
 <img src="https://user-images.githubusercontent.com/86391684/127379861-4ada9714-4355-4e5c-a973-0a2765a3a742.png" width="650" />
 
@@ -120,7 +120,7 @@ ________________________________________________________________________________
 Descrição da configuração da plataforma atravéz do CubeMX integrado na IDE STM32Cube, configurações não especificadas estão definidas como padrão 
 para geração do código.
 
-A partir de agora já temos a ideia do que será feito, e podemos prosseguir para a configuração do microcontrolador. na área de trabalho inicial de configuração, precisamos adicionar como será feito a comunicação da plataforma e o computador, nesse caso pela linha serial USB 
+A partir de agora já temos a ideia do que será feito, e podemos prosseguir para a configuração do microcontrolador. Na área de trabalho inicial de configuração, precisamos adicionar como será feito a comunicação da plataforma e o computador, nesse caso pela linha serial USB 
 
   1. Na guia "System Core" clique em SYS > Debug > Serial Wire
 
@@ -142,31 +142,25 @@ Partimos então para a configuração dos periféricos do experimento, a começa
 
 Na cofinguração do botão do usuário vamos definir o pino PA0 como GPIO_EXTI0
 
-  1. Abra a congiguração do GPIO em System Core > GPIO || Ao selecionar o pino PA0 abres as configurações
+  1. Abra a configuração do GPIO em System Core > GPIO || Ao selecionar o pino PA0 abres as configurações
   2. Defina o *GPIO mode* como modo de interrupção externa com detecção de disparo de borda ascendente || Assim temos a interrupção logo ao precionar o botão
   3. Em GPIO Pull-up/Pull-down defina como Pull-down || É definido como Pull-down pois, como é visto no esquemático do botão, o pino de entrada no MCU está em nível lógico baixo por padrão (quando o botão não está pressionado)
-  4. Logo acima temos a aba NVIC va até ela e selecione enable || NVIC dá um controle para priorizar interrupções, além de outras utilidades
+  4. Logo acima temos a aba NVIC, vá até ela e selecione enable || NVIC dá um controle para priorizar interrupções, além de outras utilidades
 
 <img src="https://user-images.githubusercontent.com/86391684/127388241-087ed066-0307-4326-aedc-65c4e6b2240e.png" width="800" />
-
-  Em System Core > NVIC temos as configurações de prioridades de interrupções, nelas foi deixado com prioridade maior (valor numérico menor) as interrupções internas do sistema, por seguinte foram configuradas as demais conformem surgissem no código.
-  
-  <img src="https://user-images.githubusercontent.com/86391684/127602243-9f93cdfa-7ec5-49da-afd3-ce8f35677258.png" width="800" />
-
-  obs.: se não configurado isso, o código fica preso dentro de funções da biblioteca HALL, quando tais funções forem chamadas dentro de alguma rotina de tratamento de interrupção. Este erro é relatado em fóruns, e deverá ser explicado melhor aqui quando se obter uma resposta definitiva.
 
 
 A configuração da recepçãos dos dados vindo do potenciômetro vem a seguir
 
   1. Definimos o pino PA6 como *ADC1_IN6*
   2. Seguinte vá em System Core > DMA > Na aba DMA2 clique em *ADD*
-  3. Adicione o ADC1 ao DMA e configure em Mode > Circular || Desse modo temos o conversor AD captando e convertendo dados e o DMA colocando os dados diretamente na memória em um *buffer*, o modo circular faz com que quando o buffer estiver cheio de dados, o DMA volte a enchelo pelo início
+  3. Adicione o ADC1 ao DMA e configure em Mode > Circular || Desse modo temos o conversor AD captando e convertendo dados e o DMA colocando os dados diretamente na memória em um *buffer*, o modo circular faz com que quando o buffer estiver cheio de dados, o DMA volte a enchê-lo pelo início
   4. Em analog > ADC1 > Parameter Settings é possível ver as configurações do ADC, selecione as opções abaixo
      - Em *Clock Prescaler* selecione *PCLK2 divided by 8* || Assim teremos a derivação do clock de PCLK2 divido por 8
      - *Resolution* selecione *12 bits* ||com 12 bits ao variar o potenciômentro, variamos os dados de 0 até 4095 em decimal
      - Habilite *Continuous conversion mode* 
      - Habilite *DMA Continuous Rquests*
-     - em *Rank* temos *Sampling time* selecione *480 Cycles* || Define a quantidade de ciclos para a amostragem de um sinal
+     - Em *Rank* temos *Sampling time* selecione *480 Cycles* || Define a quantidade de ciclos para a amostragem de um sinal
 
 <img src="https://user-images.githubusercontent.com/86391684/127425182-ffa2fd9f-d58e-4472-be13-1da318a9d9c5.png" width="800" />
 
@@ -192,7 +186,7 @@ Por fim temos a configuração do Conector SD
 
 <img src="https://user-images.githubusercontent.com/86391684/127431076-b5a8be0a-f04e-4ada-a328-5a3538c9f1e6.png" width="400" />
 
-  5. definimos então o pino PI15, de detecção do cartão SD, como entrada (GPIO_Input)
+  5. Definimos então o pino PI15, de detecção do cartão SD, como entrada (GPIO_Input)
   6. Subsequentemente vá até Middleware > FATFS > em *Mode* marque *SD card*
   7. Em *configuration* clique na aba *Platform Settings*, em Detect_SDIO, selecione o PI15 na coluna *Found Solutions*
 
@@ -205,6 +199,14 @@ Por fim temos a configuração do Conector SD
   9. Na aba *Project Manager* recomendado alterar o *Minimum Heap Size* para "0x400" e o *Minimum Stack Size* para "0x800"
 
 <img src="https://user-images.githubusercontent.com/86391684/127434000-5a883465-548c-403b-8e10-6d33d6a4ea3b.png" width="800" />
+
+Para finalizar devemos configurar a prioridade das interrupções, para isso retorne na aba *Pinout & Configuration*
+
+Em System Core > NVIC temos as configurações de prioridades de interrupções, nelas foi deixado com prioridade maior (valor numérico menor) as interrupções internas do sistema, por seguinte foram configuradas as demais conforme surgissem no código.
+  
+  <img src="https://user-images.githubusercontent.com/86391684/127602243-9f93cdfa-7ec5-49da-afd3-ce8f35677258.png" width="800" />
+
+  obs.: se não configurado isso, o código fica preso dentro de funções da biblioteca HALL, quando tais funções forem chamadas dentro de alguma rotina de tratamento de interrupção. Este erro é relatado em fóruns, e deverá ser explicado melhor aqui quando se obter uma resposta definitiva.
 
 Assim finalizamos a configuração da plataforma. Podemos então salvar o projeto e gerar o código inicial, é possivel salvar o projeto atravéz do ícone de disquete :floppy_disk: ou pelo atalho "Ctrl+S" ou pela guia File > Save.
 
